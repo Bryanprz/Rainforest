@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140613015559) do
+ActiveRecord::Schema.define(version: 20140617212211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,22 +28,37 @@ ActiveRecord::Schema.define(version: 20140613015559) do
     t.datetime "updated_at"
   end
 
-  create_table "items", force: true do |t|
-    t.text     "content"
-    t.boolean  "status"
-    t.integer  "list_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "items", ["list_id"], name: "index_items_on_list_id", using: :btree
-
-  create_table "lists", force: true do |t|
-    t.string   "title"
+  create_table "cohorts", force: true do |t|
+    t.string   "name"
     t.text     "description"
+    t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "cohorts", ["school_id"], name: "index_cohorts_on_school_id", using: :btree
+
+  create_table "comments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "submission_id"
+    t.text     "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["submission_id"], name: "index_comments_on_submission_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
+
+  create_table "enrollments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "cohort_id"
+    t.integer  "role"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "enrollments", ["cohort_id"], name: "index_enrollments_on_cohort_id", using: :btree
+  add_index "enrollments", ["user_id"], name: "index_enrollments_on_user_id", using: :btree
 
   create_table "photos", force: true do |t|
     t.string   "url"
@@ -84,29 +99,62 @@ ActiveRecord::Schema.define(version: 20140613015559) do
   add_index "reviews", ["product_id"], name: "index_reviews_on_product_id", using: :btree
   add_index "reviews", ["user_id"], name: "index_reviews_on_user_id", using: :btree
 
-  create_table "todolists", force: true do |t|
-    t.string   "task"
-    t.boolean  "completed"
+  create_table "schools", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "subdomain"
+  end
+
+  add_index "schools", ["subdomain"], name: "index_schools_on_subdomain", unique: true, using: :btree
+
+  create_table "submissions", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "task_id"
+    t.text     "submission"
+    t.boolean  "correctness"
+    t.integer  "percieved_points"
+    t.integer  "actual_points"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "users", force: true do |t|
-    t.string   "username"
-    t.string   "password"
-    t.string   "display"
-    t.string   "avatar_url"
-    t.integer  "access"
+  add_index "submissions", ["task_id"], name: "index_submissions_on_task_id", using: :btree
+  add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
+
+  create_table "tasks", force: true do |t|
+    t.text     "description"
+    t.boolean  "visibility"
+    t.integer  "unit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "avatar_url_file_name"
-    t.string   "avatar_url_content_type"
-    t.integer  "avatar_url_file_size"
-    t.datetime "avatar_url_updated_at"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "photo_updated_at"
   end
+
+  add_index "tasks", ["unit_id"], name: "index_tasks_on_unit_id", using: :btree
+
+  create_table "units", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "cohort_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "units", ["cohort_id"], name: "index_units_on_cohort_id", using: :btree
+
+  create_table "users", force: true do |t|
+    t.string   "username"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.integer  "school_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "password_digest"
+  end
+
+  add_index "users", ["school_id"], name: "index_users_on_school_id", using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end

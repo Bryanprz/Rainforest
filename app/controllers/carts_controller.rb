@@ -6,7 +6,7 @@ class CartsController < ApplicationController
     # @cart = {id: quantity}. So @cart[params[:id]] will return quantity
     # of item at i'th id.
 
-    current_quantity = @cart.@product.id || 0
+    #current_quantity = @cart.@product.id || 0
 
     # Add the user's updated quantity to the cart. 
     new_quantity = params[:quantity].to_i + current_quantity
