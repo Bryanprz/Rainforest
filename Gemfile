@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.1.1'
 gem 'pg'
-gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
+gem "paperclip"#, :git => "git://github.com/thoughtbot/paperclip.git"
 gem 'aws-sdk'
 gem 'sass-rails', '~> 4.0.3'
 gem 'sass'

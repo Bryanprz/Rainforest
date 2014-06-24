@@ -1,5 +1,7 @@
 Rails.application.configure do
 
+  config.paperclip_defaults = {:storage => :fog, :fog_credentials => {:provider => "Local", :local_root => "#{Rails.root}/public"}, :fog_directory => "images", :fog_host => "rainforest-bryan.herokuapp.com"}
+
   config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
 
   # Settings specified here will take precedence over those in config/application.rb.
